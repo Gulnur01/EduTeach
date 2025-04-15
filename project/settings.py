@@ -60,7 +60,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'project.urls'
 
@@ -141,6 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mysite')
 
 # settings.py
 STATIC_URL = '/mysite/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 
 ASGI_APPLICATION = 'project.asgi.application'
 
@@ -150,6 +154,6 @@ load_dotenv()  # .env файлын жүктеу
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['eduteach.onrender.com']
