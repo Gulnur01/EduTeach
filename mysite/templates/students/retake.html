@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Menu</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #27ae60;
+            --warning-color: #e74c3c;
+            --background: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #dcdde1;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-right:20px;
+            margin-top: 70px;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .test-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .test-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-new {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .status-completed {
+            background: rgba(39, 174, 96, 0.2);
+            color: var(--accent-color);
+        }
+
+        .status-expired {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--warning-color);
+        }
+
+        .test-info {
+            margin-bottom: 15px;
+        }
+
+        .test-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .test-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .results-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .results-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            text-align: center;
+            padding: 15px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .result-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .tests-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f0f2f5;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 280px; /* Same as sidebar width */
+            right: 0;
+            height: 60px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .top-nav-left {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: #f0f2f5;
+            border-radius: 20px;
+            padding: 5px 15px;
+            margin: 0 20px;
+        }
+
+        .search-container input {
+            border: none;
+            background: none;
+            padding: 8px;
+            width: 300px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            background: #6b5bf5;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-container button:hover {
+            background: #5648f5;
+        }
+
+        .top-nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .top-nav-right a {
+            color: #333;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 20px;
+        }
+
+        /* Existing Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 280px;
+            background: linear-gradient(145deg, #6b5bf5, #8069f2);
+            padding: 20px;
+            box-shadow: 15px 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            color: white;
+            font-size: 40px;
+            font-weight: 600;
+            padding: 20px 15px;
+            margin-bottom: 30px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .menu-item span.badge {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .bird-container {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+        }
+
+        .site-link {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .site-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 80px 20px 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 180px;
+            overflow: hidden;
+            
+            align-items: center;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .profile-info h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-details {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #6b5bf5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-number {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .payment-methods img {
+            width: 60px;
+            height: auto;
+        }
+
+        .courses-timeline {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #6b5bf5;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 18px);
+            background: #e0e0e0;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .course-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .course-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: white;
+            background: #4CAF50;
+            margin-left: 10px;
+        }
+
+        .premium-card {
+            background: #6b5bf5;
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .premium-features {
+            margin-top: 20px;
+        }
+
+        .premium-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-features li::before {
+            content: '•';
+            margin-right: 10px;
+        }
+
+        .subscribe-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #6b5bf5;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            transform: scale(1.05);
+        }
+
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --text-color: #333333;
+            --background-color: #f5f7ff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        .container1 {
+            max-width: 1170px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-right: 30px;
+            margin-top: 80px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .test-info1 {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .test-meta {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .test-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .test-description {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .meta-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: var(--primary-color);
+        }
+
+        .timer-container {
+            background-color: var(--light-color);
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .timer {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .timer.warning {
+            color: var(--warning-color);
+        }
+
+        .timer.danger {
+            color: var(--danger-color);
+        }
+
+        .progress-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+        }
+
+        .progress-indicators {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .progress-dot.current {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .progress-dot.completed {
+            background-color: var(--success-color);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .question-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .question-header {
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .question-hint {
+            background-color: rgba(67, 97, 238, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-hint i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-item {
+            background-color: var(--light-color);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .option-item.correct {
+            border-color: var(--success-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .option-item.incorrect {
+            border-color: var(--danger-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .option-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .option-item.selected .option-marker {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .option-item.correct .option-marker {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .option-item.incorrect .option-marker {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-feedback {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .option-item.correct .option-feedback,
+        .option-item.incorrect .option-feedback {
+            display: block;
+        }
+
+        .option-item.correct .option-feedback {
+            color: var(--success-color);
+        }
+
+        .option-item.incorrect .option-feedback {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn2 {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .feedback-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            display: none;
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--success-color);
+        }
+
+        .feedback-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+        }
+
+        .feedback-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .score-container {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .score-title {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .feedback-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .test-info1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .timer-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn2 {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="top-nav-left">Тест</div>
+        <div class="search-container">
+            <input type="text" placeholder="Я ищу...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="top-nav-right">
+            <a href="#"><i class="fas fa-bell"></i></a>
+            <a href="#"><i class="fas fa-cog"></i></a>
+        </div>
+    </div>
+
+    <!-- Existing Sidebar -->
+    <div class="sidebar">
+        <div class="logo"><strong>EduTeach</strong></div>
+        
+        <a href="{% url 'home' %}" class="menu-item">
+            <i class="fas fa-check-circle"></i>
+            Басты бет
+            <span class="badge">3</span>
+        </a>
+
+        <a href="{% url 'lesson' %}" class="menu-item">
+            <i class="fas fa-graduation-cap"></i>
+            Сабақтар
+            <span class="badge">3</span>
+        </a>
+        
+        <a href="{% url 'student_dashboard' %}" class="menu-item">
+            <i class="fas fa-calendar-alt"></i>
+            Тапсырма
+            <span class="badge">2</span>
+        </a>
+        
+        <a href="{% url 'grades_view' %}" class="menu-item">
+            <i class="fas fa-trophy"></i>
+            Журнал
+        </a>
+        
+        <a href="{% url 'message' %}" class="menu-item">
+            <i class="fas fa-envelope"></i>
+            Чат беседа
+            <span class="badge">1</span>
+        </a>
+
+    </div>
+
+    <div class="container1">
+        <div class="test-info1">
+            <div class="test-meta">
+                <h1 class="test-title">{{lesson_title}}</h1>
+                <p class="test-description">{{lesson_goal}}</p>
+                <div class="meta-items">
+                    <div class="meta-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>10 вопросов</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>20 минут</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>100 баллов</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timer-container">
+                <i class="fas fa-hourglass-half"></i>
+                <div class="timer" id="timer">20:00</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-header">
+                <h3 class="progress-title">Прогресс</h3>
+                <div class="progress-indicators" id="progressDots">
+                    <div class="progress-dot current"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 10%;"></div>
+            </div>
+        </div>
+
+        <div class="question-container" id="questionContainer">
+            {% for question in questions %}
+            <div class="question" data-question-id="{{ question.id }}" style="{% if forloop.first %}display:block;{% else %}display:none;{% endif %}">
+                <div class="question-header">
+                    <div class="question-number">Вопрос {{ forloop.counter }} из {{ total_questions }}</div>
+                    <h2 class="question-text">{{ question.text }}</h2>
+                    <div class="question-hint">
+                        <i class="fas fa-lightbulb"></i>
+                        <p>Подумайте о последовательности действий, которые вы выполняете каждый день.</p>
+                    </div>
+                </div>
+    
+                <div class="options-container">
+                    {% for answer in question.answers.all %}
+                    <div class="option-item">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" id="answer_{{ answer.id }}">
+                        <label for="answer_{{ answer.id }}">{{ answer.text }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    
+        <div class="navigation">
+            <button class="btn2 btn-secondary" id="prevQuestion" disabled>
+                <i class="fas fa-arrow-left"></i> Предыдущий
+            </button>
+            <button class="btn2 btn-primary" id="submitTest">
+                Проверить ответ
+            </button>
+            <button class="btn2 btn-primary" id="nextQuestion" style="display: none;">
+                Следующий <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <div class="feedback-container" id="feedbackContainer" style="display: none;">
+            <h2 class="feedback-title">Тест завершен!</h2>
+            <p class="feedback-subtitle">Поздравляем! Ваш результат:</p>
+            <div class="score-container">
+                <div class="score-title">Ваш результат</div>
+                <div class="score-value" id="finalScore"></div>
+            </div>
+        </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            const icon = themeToggle?.querySelector('i');
+        
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    if (body.getAttribute('data-theme') === 'dark') {
+                        body.removeAttribute('data-theme');
+                        icon?.classList.replace('fa-sun', 'fa-moon');
+                    } else {
+                        body.setAttribute('data-theme', 'dark');
+                        icon?.classList.replace('fa-moon', 'fa-sun');
+                    }
+                });
+            }
+        
+            // Таймер
+            let timerEl = document.getElementById('timer');
+            let totalSeconds = 19 * 60 + 45; // 19 минут 45 секунд
+            let timerInterval;
+        
+            function updateTimer() {
+                if (!timerEl) return;
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+                if (totalSeconds <= 300) timerEl.classList.add('warning'); // 5 минут
+                if (totalSeconds <= 60) timerEl.classList.replace('warning', 'danger'); // 1 минута
+        
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                } else {
+                    clearInterval(timerInterval);
+                    submitTest();  // Автоотправка теста при завершении времени
+                }
+            }
+            timerInterval = setInterval(updateTimer, 1000);
+        
+            // Управление прогресс-баром
+            let currentQuestionIndex = 0;
+            const questions = document.querySelectorAll(".question");
+            const totalQuestions = questions.length;
+            const progressDots = document.querySelectorAll('.progress-dot');
+            const progressFill = document.querySelector('.progress-fill');
+        
+            document.getElementById("nextQuestion")?.addEventListener("click", () => {
+                if (currentQuestionIndex < totalQuestions - 1) {
+                    questions[currentQuestionIndex].style.display = "none";
+                    progressDots[currentQuestionIndex].classList.replace('current', 'completed'); // Завершаем текущий шаг
+        
+                    currentQuestionIndex++;
+                    questions[currentQuestionIndex].style.display = "block";
+                    progressDots[currentQuestionIndex].classList.add('current'); // Подсвечиваем новый шаг
+        
+                    if (progressFill) {
+                        progressFill.style.width = `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`;
+                    }
+                }
+                updateNavigationButtons();
+            });
+        
+            document.getElementById("prevQuestion")?.addEventListener("click", () => {
+                if (currentQuestionIndex > 0) {
+                    questions[currentQuestionIndex].style.display = "none";
+                    progressDots[currentQuestionIndex].classList.remove('current'); // Убираем выделение с текущего шага
+        
+                    currentQuestionIndex--;
+                    questions[currentQuestionIndex].style.display = "block";
+                    progressDots[currentQuestionIndex].classList.replace('completed', 'current'); // Возвращаем шаг назад
+        
+                    if (progressFill) {
+                        progressFill.style.width = `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`;
+                    }
+                }
+                updateNavigationButtons();
+            });
+        
+            function updateNavigationButtons() {
+                document.getElementById("prevQuestion").disabled = currentQuestionIndex === 0;
+                document.getElementById("nextQuestion").style.display = currentQuestionIndex === totalQuestions - 1 ? "none" : "inline-block";
+                document.getElementById("submitTest").style.display = currentQuestionIndex === totalQuestions - 1 ? "inline-block" : "none";
+            }
+        
+            // Устанавливаем начальные состояния
+            progressDots[0].classList.add('current');
+            updateNavigationButtons();
+        
+            function submitTest() {
+                let formData = new FormData();
+                questions.forEach(question => {
+                    let questionId = question.dataset.questionId;
+                    let selectedAnswer = question.querySelector("input[type=radio]:checked")?.value;
+                    if (selectedAnswer) {
+                        formData.append("question_" + questionId, selectedAnswer);
+                    }
+                });
+        
+                fetch("{% url 'retake_test' task.id %}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"  // CSRF-токен
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.score !== undefined) {
+                        clearInterval(timerInterval);  // Останавливаем таймер
+                        document.getElementById("questionContainer").style.display = "none";
+                        document.getElementById("finalScore").textContent = data.score + "%";
+                        document.getElementById("feedbackContainer").style.display = "block";
+        
+                        // Скрываем кнопки
+                        document.getElementById("prevQuestion").style.display = "none";
+                        document.getElementById("nextQuestion").style.display = "none";
+                        document.getElementById("submitTest").style.display = "none";
+                    }
+                })
+                .catch(error => console.error("Ошибка:", error));
+            }
+        
+            document.getElementById("submitTest")?.addEventListener("click", submitTest);
+        });
+    </script>
+</body>
+</html>

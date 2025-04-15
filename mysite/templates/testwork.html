@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Works Review</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --secondary: #2D3748;
+            --background: #F5F7FA;
+            --card-bg: #ffffff;
+            --text: #2D3748;
+            --border: #E2E8F0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #7C3AED;
+            --warning: #ED8936;
+            --danger: #F56565;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle {
+            background: var(--background);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Бұл әрбір контейнерді минималды 300px-ге орналастырады */
+            gap: 2rem; /* Контейнерлер арасындағы арақашықтық */
+        }
+
+        .works-section {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+            max-width: 600px; /* Енін шектеу */
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--background);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .work-item {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .work-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .work-item.active {
+            border: 2px solid var(--primary);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .work-content1 {
+            width: 800px;
+            transform: translateX(-100px); /* 300px оңға жылжыту */
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .essay-text {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .grading-section {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .grade-input {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .grade-input input {
+            width: 80px;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        .feedback-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text);
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .save-btn {
+            background: var(--background);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;      /* Жоғарғы жағынан 20px қашықтықта */
+            right: 20px;    /* Оң жақтан 20px қашықтықта */
+            z-index: 9999;  /* Басыңыздағы элементтерден жоғары болуын қамтамасыз етеді */
+        }
+        
+        .message {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8d7da;   /* Қызыл түс - қателік хабарламасы үшін */
+            color: #721c24;              /* Қара түсті мәтін */
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            opacity: 1;
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Анимация */
+        }
+        
+        .message.success {
+            background-color: #d4edda;   /* Жасыл түс - сәтті хабарламалар үшін */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;  /* Қызыл түс - қателік хабарламалары */
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .no-underline {
+            text-decoration: none;
+        }
+
+
+
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle {
+            background: var(--background);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .score-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .questions-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .question-card {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .option.correct {
+            background: rgba(72, 187, 120, 0.1);
+            border: 2px solid var(--success);
+            color: var(--success);
+        }
+
+        .option.incorrect {
+            background: rgba(245, 101, 101, 0.1);
+            border: 2px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .option.neutral {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .status-icon.correct {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-icon.incorrect {
+            background: var(--danger);
+            color: white;
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .score-card {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+        .correct-answer {
+            border: 2px solid #7C3AED;
+            background-color:  solidrgba(124, 58, 237, 0.24);
+        }
+        
+        .wrong-option {
+            border: 2px solid red;
+            background-color: #ffeaea;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-book-reader"></i>
+            Оқушылардың үй жұмысы
+        </div>
+        <a href="{% url 'homework' %}" class="no-underline">
+            <button class="action-btn submit-btn">
+                <i class="fa fa-arrow-left"></i> Артқа
+            </button>
+        </a>
+    </header>
+
+    <div class="main-container">
+        <!-- Works List Section -->
+        <div class="works-section">
+            <div class="filter-buttons">
+                <button class="filter-btn {% if status == 'all' %}active{% endif %}" onclick="filterStudents('all')">Барлығы</button>
+                <button class="filter-btn {% if status == 'pending' %}active{% endif %}" onclick="filterStudents('pending')">Күтуде</button>
+                <button class="filter-btn {% if status == 'graded' %}active{% endif %}" onclick="filterStudents('graded')">Бағаланды</button>
+            </div>
+    
+            <!-- Works List -->
+            <div class="works-list">
+    {% for student in students %}
+    <div class="work-item
+        {% if student.id|stringformat:"s" == selected_student_id %}active{% endif %}
+        {% if student.login.id in graded_student_ids %}graded{% else %}pending{% endif %}"
+        data-url="{% url 'testwork' class_model.id %}?student_id={{ student.id }}&status={{ status }}">
+        
+        <div class="student-info">
+            <div class="student-avatar">
+                {{ student.login.first_name|slice:":1" }}{{ student.login.last_name|slice:":1" }}
+            </div>
+            <div>
+                <h3>{{ student.login.first_name }} {{ student.login.last_name }}</h3>
+                <p style="opacity: 0.8">{{ class_model.class_name }} {{ class_model.option }} сыныбы</p>
+            </div>
+        </div>
+        <small style="opacity: 0.7"></small>
+    </div>
+    {% endfor %}
+</div>
+        </div>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}" id="message-{{ forloop.counter }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if selected_student_id %}
+    <div class="work-content">
+        <h3></h3>
+        {% for sub in submissions %}
+        <div class="work-content1">
+            <header class="header1">
+                <div class="student-info">
+                    <div class="student-avatar">{{ selected_student.login.first_name|slice:":1" }}{{ selected_student.login.last_name|slice:":1" }}</div>
+                    <div>
+                        <h2>{{ selected_student.login.first_name }} {{ selected_student.login.last_name }}</h2>
+                        <p style="opacity: 0.8">{{ class_model.class_name }} {{ class_model.option }} сыныбы</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="score-card">
+                <div class="score-item"><div class="score-value" style="color: var(--primary)">{{ sub.score }}%</div><div>Балл</div></div>
+                <div class="score-item"><div class="score-value" style="color: var(--success)">{{ sub.correct }}</div><div>Дұрыс</div></div>
+                <div class="score-item"><div class="score-value" style="color: var(--danger)">{{ sub.incorrect }}</div><div>Қате</div></div>
+                <div class="score-item"><div class="score-value" style="color: var(--warning)">{{ sub.total }}</div><div>Сұрақтар саны</div></div>
+            </div>
+
+            <div class="questions-container">
+                <h2 style="margin-bottom: 2rem">Сұрақтар</h2>
+                {% for q in sub.questions %}
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">{{ forloop.counter }}. сұрақ</span>
+                        <span style="color: {% if q.is_correct %}var(--success){% else %}var(--danger){% endif %}">
+                            {% if q.is_correct %}<i class="fas fa-check"></i> Дұрыс{% else %}<i class="fas fa-times"></i> Қате{% endif %}
+                        </span>
+                    </div>
+                    <div class="question-text">
+                        <h4>{{ q.question_text }}</h4>
+                    </div>
+                    <div class="options-grid">
+                        {% for option in q.all_answers %}
+                            <div class="option 
+                                {% if option == q.selected_answer and not q.is_correct %}wrong-option{% endif %}
+                                {% if option in q.correct_answers and option != q.selected_answer %}correct-answer{% endif %}
+                                {% if option == q.selected_answer and q.is_correct %}correct-answer{% endif %}
+                            ">
+                                <span class="status-icon">
+                                    {% if option == q.selected_answer %}
+                                        {% if q.is_correct %}
+                                            <i class="fas fa-check" style="color: #7C3AED;"></i> 
+                                        {% else %}
+                                            <i class="fas fa-times" style="color: red;"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if option in q.correct_answers and option != q.selected_answer %}
+                                        <i class="fas fa-check" style="color: #7C3AED;"></i>
+                                    {% endif %}
+                                </span>
+                                <span>{{ option }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+    <script>
+        // Filter Buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Work Items
+        const workItems = document.querySelectorAll('.work-item');
+        workItems.forEach(item => {
+            item.addEventListener('click', () => {
+                workItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const workItems = document.querySelectorAll('.work-item');
+    
+            workItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Оқушының ID параметрін алу
+                    const studentId = item.getAttribute('data-url').split('student_id=')[1].split('&')[0];
+                    const status = item.getAttribute('data-url').split('status=')[1];
+    
+                    // URL-ді жаңарту, бірақ тек оқушының тапсырмасын көрсету үшін
+                    window.location.href = `${item.getAttribute('data-url')}`;
+                });
+            });
+        });
+
+        function filterStudents(group) {
+            const items = document.querySelectorAll('.work-item');
+            items.forEach(el => {
+                if (group === 'all') {
+                    el.style.display = 'block';
+                } else if (group === 'graded' && el.classList.contains('graded')) {
+                    el.style.display = 'block';
+                } else if (group === 'pending' && el.classList.contains('pending')) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        
+            // Update the filter buttons' active state
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = [...document.querySelectorAll('.filter-btn')].find(b => b.textContent.includes(
+                group === 'all' ? 'Барлығы' : group === 'pending' ? 'Күтуде' : 'Бағаланды'));
+            if (activeBtn) activeBtn.classList.add('active');
+        
+            // Change the URL with the status filter
+            window.location.href = `${window.location.pathname}?status=${group}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Хабарламалар элементін табу
+            const messages = document.querySelectorAll('.message');
+    
+            messages.forEach((message, index) => {
+                // Әр хабарламаны көрсеткеннен кейін белгілі уақыттан соң жасыру
+                setTimeout(() => {
+                    message.style.opacity = 0;  // Хабарламаны жұқарту
+                    message.style.transform = 'translateY(-10px)';  // Хабарламаны жоғары жылжыту
+                }, 3000); // 3 секундтан кейін жасырылады
+    
+                // Хабарлама жоғалған соң оны DOM-нан алып тастау
+                setTimeout(() => {
+                    message.remove();  // Хабарламаны DOM-нан жою
+                }, 4000); // 4 секундтан кейін хабарлама толықтай жоғалады
+            });
+        });
+    </script>
+</body>
+</html>

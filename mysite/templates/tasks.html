@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTeach - Teacher Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/model.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tasks.css' %}">
+    <style>
+        .data-container {
+            width: 100%;
+            max-width: 1200px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            
+        }
+
+        .data-header {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .data-row {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            box-shadow: 
+                inset 2px 2px 5px #f5f5f5,
+                inset -2px -2px 5px #ffffff;
+        }
+
+        
+
+        .data-cell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #34495e;
+        }
+
+        @media (max-width: 768px) {
+            .data-header, .data-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .data-header, .data-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-cell {
+                text-align: center;
+                padding: 5px 0;
+            }
+        }
+
+        /* Анимация появления */
+        
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            EduTeach
+        </div>
+        <a href="{% url 'index' %}" class="nav-item active">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            Басты бет
+        </a>
+        <a href="{% url 'class1' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            Сынып
+        </a>
+        <a href="{% url 'quarters_list' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            КТП/ҚМЖ
+        </a>
+        <a href="{% url 'meeting_room' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Чат беседа
+        </a>
+        <a href="{% url 'tasks' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+            </svg>
+            Тапсырмалар
+        </a>
+        
+        <a href="{% url 'homework' %}" class="nav-item">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 14H4m6.5 3L8 20m5.5-3 2.5 3M4.88889 17H19.1111c.4909 0 .8889-.4157.8889-.9286V4.92857C20 4.41574 19.602 4 19.1111 4H4.88889C4.39797 4 4 4.41574 4 4.92857V16.0714c0 .5129.39797.9286.88889.9286ZM13 14v-3h4v3h-4Z"/>
+              </svg>              
+            Үй жұмысы
+        </a>
+
+        <a href="{% url 'model_view' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            3D модельдеу
+        </a>
+        <a href="#" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Параметрлер
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+            <div class="header">
+            <h1>Параметрлер</h1>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://picsum.photos/200/200?random=1" alt="Profile">
+                </div>
+            </div>
+        </div>
+
+        <table class="course-table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Тақырып</th>
+                    <th>Статус</th>
+                    <th>Тапсырма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ topic.tema }}</td>
+                    <td><span class="progress-indicator complete"></span>Қосылды</td>
+                    <td>
+                        <a href="{% url 'add_lesson_and_test' topic.id %}"><button class="btn btn-video"><i class="fas fa-play"></i> Видео</button></a>
+                        <a href="{% url 'task_detail' topic.id %}"><button class="btn btn-task"><i class="fas fa-tasks"></i>Тапсырма</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+        <h2 class="section-title">Сақталған материалдар</h2>
+        <div class="saved-materials">
+            <div class="material-card">
+                <div class="material-header">
+                    <span class="material-type type-video">Видео сабақ</span>
+                    <span>15:30 мин</span>
+                </div>
+                <h3>Ақпаратпен жұмыс жасау. </h3>
+                <p>Ақпаратпен жұмыс жасау.  Компьютер таңдаймыз</p>
+                <div class="material-actions">
+                    <button class="btn btn-video"><i class="fas fa-play"></i> Қарау</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <div class="material-header">
+                    <span class="material-type type-task">Тапсырма</span>
+                    <span>Деңгей: Орташа</span>
+                </div>
+                <h3>Практика: Массивтерді сұрыптау</h3>
+                <p>Әр түрлі сұрыптау алгоритмдерін енгізу</p>
+                <div class="material-actions">
+                    <button class="btn btn-task"><i class="fas fa-tasks"></i>Қарау</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <div class="material-header">
+                    <span class="material-type type-video">Видео сабақ</span>
+                    <span>20:15 мин</span>
+                </div>
+                <h3>Деректер құрылымдары: массивтер</h3>
+                <p>Бір өлшемді және көп өлшемді массивтермен жұмыс</p>
+                <div class="material-actions">
+                    <button class="btn btn-video"><i class="fas fa-play"></i>Қарау</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       
+    </script>
+</body>
+</html>

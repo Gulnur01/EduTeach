@@ -1,0 +1,164 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+:root {
+    --primary-color: #ffffff;
+    --secondary-color: #f8f9fa;
+    --accent-color: #2c5282;
+    --text-color: #2d3748;
+    --border-color: #e2e8f0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.center-wrapper {
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;   /* Центрирование по вертикали */
+    height: 100vh; /* Высота экрана */
+}
+
+.container {
+    width: 153%;
+    max-width: 1500px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.theme-toggle {
+    padding: 0.5rem;
+    border-radius: 6px;
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--border-color);
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Три равные колонки */
+    gap: 20px; /* Отступы между карточками */
+    margin-top: 20px;
+}
+
+.lesson-card {
+    background: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.lesson-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transform: translateY(-2px);
+}
+
+.lesson-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.lesson-content {
+    padding: 1.5rem;
+}
+
+.lesson-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.lesson-description {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.progress-container {
+    background: var(--secondary-color);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    background: var(--secondary-color);
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    .lessons-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script src="https://cdn.zegocloud.com/sdk/chat/2.3.0/zego-chat-sdk.js"></script>
+</head>
+<body>
+    <h1>Chat</h1>
+    <p>Welcome, {{ name }}!</p>
+
+    <div id="chatContainer">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        const appID = 668713997;  // Замените на ваш App ID
+        const serverSecret = '8d6352d1b8bc47bc9c74ddea64e5ed83';  // Замените на ваш Server Secret
+        const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");;  // Уникальный идентификатор комнаты
+
+        const zegoChat = new ZegoChat(appID, serverSecret);
+
+        function getUrlParams(url) {
+            const params = {};
+            const parser = new URL(url);
+            const query = parser.search.substring(1);
+            const vars = query.split('&');
+        
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split('=');
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+            }
+            return params;
+        }
+
+        async function initChat() {
+            await zegoChat.login(roomID, {
+                userID: '{{ request.user.username }}', 
+                userName: '{{ name }}'
+            });
+
+            zegoChat.onMessageReceived = function(message) {
+                console.log("Получено сообщение:", message);  // Лог для отладки
+                const messagesDiv = document.getElementById('messages');
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${message.userName}: ${message.content}`;
+                messagesDiv.appendChild(messageElement);
+            };
+        }
+
+        document.getElementById('sendButton').onclick = async function() {
+            const messageInput = document.getElementById('messageInput');
+            const content = messageInput.value;
+        
+            if (content) {
+                console.log("Отправка сообщения:", content);  // Лог для отладки
+                try {
+                    await zegoChat.sendMessage(content);
+                    messageInput.value = '';  // Очистить поле ввода
+                    console.log("Сообщение отправлено");
+                } catch (error) {
+                    console.error("Ошибка при отправке сообщения:", error);
+                }
+            }
+        };
+
+        
+    </script>
+</body>
+</html>

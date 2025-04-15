@@ -1,0 +1,26 @@
+!<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{ test.lesson.title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {% for question in test.questions.questions %}
+        <div>
+            <p>{{ question.question }}</p>
+            {% for option in question.options %}
+                <label>
+                    <input type="radio" name="{{ forloop.parentloop.counter0 }}" value="{{ forloop.counter0 }}" required>
+                    {{ option }}
+                </label>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <button type="submit">Отправить</button>
+</form>
+</body>
+</html>

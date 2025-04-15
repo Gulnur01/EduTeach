@@ -1,0 +1,247 @@
+<!-- myapp/templates/table.html -->
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTeach - Teacher Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <style>
+        /* Кестенің жалпы стилі */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .clas {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f3f6f9;
+            color: #5e6278;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .price-input1 {
+            width: 120%;
+            padding: 8px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .price-input::placeholder {
+            color: #a1a5b7;
+        }
+
+        .btn-save {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-save:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            EduTeach
+        </div>
+        <a href="{% url 'index' %}" class="nav-item active">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            Басты бет
+        </a>
+        <a href="{% url 'class1' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            Сынып
+        </a>
+        <a href="{% url 'quarters_list' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            КТП/ҚМЖ
+        </a>
+        <a href="{% url 'meeting_room' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Чат беседа
+        </a>
+        <a href="{% url 'tasks' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+            </svg>
+            Тапсырмалар
+        </a>
+        
+        <a href="{% url 'homework' %}" class="nav-item">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 14H4m6.5 3L8 20m5.5-3 2.5 3M4.88889 17H19.1111c.4909 0 .8889-.4157.8889-.9286V4.92857C20 4.41574 19.602 4 19.1111 4H4.88889C4.39797 4 4 4.41574 4 4.92857V16.0714c0 .5129.39797.9286.88889.9286ZM13 14v-3h4v3h-4Z"/>
+              </svg>              
+            Үй жұмысы
+        </a>
+
+        <a href="{% url 'model_view' %}" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            3D модельдеу
+        </a>
+        <a href="#" class="nav-item">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Параметрлер
+        </a>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Сынып</h1>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://picsum.photos/200/200?random=1" alt="Profile">
+                </div>
+            </div>
+        </div>
+        <table id="priceTable">
+            <tr>
+                <th>Аты-жөні</th>
+                <th>12.қаз</th>
+                <th>19.қаз</th>
+                <th>26.қаз</th>
+                <th>03.қар</th>
+                <th>10.қар</th>
+            </tr>
+            {% for student_data in student_grades %}
+            <tr>
+                <td><input type="text" class="price-input" placeholder="Аты-жөні" value="{{ student_data.student.login.first_name }} {{ student_data.student.login.last_name }}"></td>
+                <td><input type="number" class="price-input" name="grade_{{ student_data.student.id }}_12_kaz" value="{{ student_data.grades.0.grade }}" oninput="saveGrade(this)"></td>
+                <td><input type="number" class="price-input" name="grade_{{ student_data.student.id }}_19_kaz" value="{{ student_data.grades.1.grade }}" oninput="saveGrade(this)"></td>
+                <td><input type="number" class="price-input" name="grade_{{ student_data.student.id }}_26_kaz" value="{{ student_data.grades.2.grade }}" oninput="saveGrade(this)"></td>
+                <td><input type="number" class="price-input" name="grade_{{ student_data.student.id }}_03_kar" value="{{ student_data.grades.3.grade }}" oninput="saveGrade(this)"></td>
+                <td><input type="number" class="price-input" name="grade_{{ student_data.student.id }}_10_kar" value="{{ student_data.grades.4.grade }}" oninput="addNewColumn(this)"></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button class="btn-save" onclick="saveData()" type="submit">Барлық деректерді сақтау</button>
+        <script>
+            function addNewColumn(input) {
+                const table = document.getElementById("priceTable");
+                const cellIndex = input.parentNode.cellIndex;
+    
+                if (cellIndex === table.rows[0].cells.length - 1 && input.value !== "") {
+                    for (let i = 0; i < table.rows.length; i++) {
+                        let newCell = table.rows[i].insertCell(-1);
+                        if (i === 0) {
+                            const date = new Date();
+                            date.setDate(date.getDate() + (i * 7));
+                            const options = { day: '2-digit', month: 'short' };
+                            newCell.outerHTML = `<th>${date.toLocaleDateString('ru-RU', options)}</th>`;
+                        } else {
+                            newCell.innerHTML = '<input type="number" class="price-input" placeholder="" oninput="addNewColumn(this)">';
+                        }
+                    }
+                }
+            }
+    
+            function saveData() {
+                const table = document.getElementById("priceTable");
+                const data = [];
+    
+                for (let i = 1; i < table.rows.length; i++) {
+                    const row = table.rows[i];
+                    const rowData = [];
+                    for (let j = 0; j < row.cells.length; j++) {
+                        const input = row.cells[j].querySelector('input');
+                        rowData.push(input ? input.value : row.cells[j].innerText);
+                    }
+                    data.push(rowData);
+                }
+    
+                console.log("Кесте деректері:", data);
+                alert("Барлық деректер сақталды!");
+            }
+            async function saveGrade(inputElement) {
+                const inputName = inputElement.name; // Пример: "grade_1_12_kaz"
+                const gradeValue = inputElement.value; // Значение оценки
+        
+                // Извлекаем ID студента и дату оценки из имени input
+                const parts = inputName.split('_');
+                const studentId = parts[1]; // ID студента
+                const datePart = parts.slice(2).join('_'); // Дата (например, "12_kaz")
+        
+                // Отправляем данные на сервер
+                const response = await fetch(`/save_grade/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: `student_id=${studentId}&date=${datePart}&grade=${gradeValue}`,
+                });
+        
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.success || 'Оценка сохранена успешно!');
+                } else {
+                    alert(result.error || 'Ошибка сохранения оценки.');
+                }
+            }            
+        </script>
+    </body>
+    </html>
+

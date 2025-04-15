@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/login.css" %}">
+</head>
+<body>
+    <div class="wave"></div>
+    <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    <div class="container">
+        <div class="illustration">
+            <img src="{% static 'img/image1.png' %}" alt="Login illustration">
+        </div>
+        <div class="login-form">
+            <h1>Welcome!</h1>
+            <p class="subtitle">Сайтқа кіру</p>
+            <form method="post" action="{% url 'profil' %}">
+                {% csrf_token %}
+            <div class="input-group">
+                <input placeholder="Email" name="username" required >
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+            {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+            <div class="forgot-password">Паролді ұмыттыңыз ба?</div>
+            <div class="buttons">
+                <button class="sign-up" type="submit">Кіру</button>
+                <button class="sign-up" type="button">Тіркелу</button>
+            </form>
+            </div>
+            <div class="social-login">
+                <p class="social-text">Жүйеге көмекпен кіріңіз</p>
+                <div class="social-icons">
+                    <div class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-icon">
+                        <i class="fab fa-linkedin-in"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+
+        // Form validation
+        const form = document.querySelector('.login-form');
+        const emailInput = document.querySelector('input[type="email"]');
+        const passwordInput = document.querySelector('input[type="password"]');
+
+        document.querySelector('.sign-in').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (!emailInput.value || !passwordInput.value) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!isValidEmail(emailInput.value)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            // Here you would typically handle the login logic
+            console.log('Login attempted');
+        });
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Add wave animation
+        function createWave() {
+            const wave = document.querySelector('.wave');
+            let degree = 0;
+
+            function updateWave() {
+                degree += 0.5;
+                wave.style.transform = `rotate(${degree}deg)`;
+                requestAnimationFrame(updateWave);
+            }
+
+            updateWave();
+        }
+
+        createWave();
+
+        // Add hover effects
+        const socialIcons = document.querySelectorAll('.social-icon');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('mouseover', () => {
+                icon.style.transform = 'translateY(-3px)';
+            });
+            
+            icon.addEventListener('mouseout', () => {
+                icon.style.transform = 'translateY(0)';
+            });
+        });
+        
+    </script>
+</body>
+</html>

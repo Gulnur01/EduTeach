@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ model.name }}</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <h1>{{ model.name }}</h1>
+
+    <script type="module">
+        import * as THREE from './static/javascript/three/build/three.module.js';
+        import { OBJLoader } from './static/javascript/three/examples/jsm/loaders/OBJLoader.js';
+    
+        // Создаем сцену
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+    
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+    
+        // Загрузка 3D-модели
+        const loader = new OBJLoader();
+        loader.load('/path/to/your/models.obj', (object) => {
+            scene.add(object);
+            camera.position.z = 5;
+            animate();
+        }, undefined, (error) => {
+            console.error('Ошибка загрузки модели:', error);
+        });
+    
+        // Анимация
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+    </script>
+    
+</body>
+</html>
+

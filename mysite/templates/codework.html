@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Works Review</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/eclipse.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --secondary: #2D3748;
+            --background: #F5F7FA;
+            --card-bg: #ffffff;
+            --text: #2D3748;
+            --border: #E2E8F0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #7C3AED;
+            --warning: #ED8936;
+            --danger: #F56565;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle {
+            background: var(--background);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Бұл әрбір контейнерді минималды 300px-ге орналастырады */
+            gap: 2rem; /* Контейнерлер арасындағы арақашықтық */
+        }
+
+        .works-section {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+            max-width: 600px; /* Енін шектеу */
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--background);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .work-item {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .work-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .work-item.active {
+            border: 2px solid var(--primary);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .work-content1 {
+            width: 800px;
+            transform: translateX(-100px); /* 300px оңға жылжыту */
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .essay-text {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .grading-section {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .grade-input {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .grade-input input {
+            width: 80px;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        .feedback-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text);
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .save-btn {
+            background: var(--background);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;      /* Жоғарғы жағынан 20px қашықтықта */
+            right: 20px;    /* Оң жақтан 20px қашықтықта */
+            z-index: 9999;  /* Басыңыздағы элементтерден жоғары болуын қамтамасыз етеді */
+        }
+        
+        .message {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8d7da;   /* Қызыл түс - қателік хабарламасы үшін */
+            color: #721c24;              /* Қара түсті мәтін */
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            opacity: 1;
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Анимация */
+        }
+        
+        .message.success {
+            background-color: #d4edda;   /* Жасыл түс - сәтті хабарламалар үшін */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;  /* Қызыл түс - қателік хабарламалары */
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .no-underline {
+            text-decoration: none;
+        }
+
+
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: inset var(--neu-shadow);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            resize: none;
+        }
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary-color: #64748b;
+            --secondary-hover: #475569;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --background-primary: #ffffff;
+            --background-secondary: #f8fafc;
+            --background-tertiary: #f1f5f9;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.25rem;
+            --radius: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+        
+        /* Тёмная тема */
+        [data-theme="dark"] {
+            --primary-color: #6366f1;
+            --primary-hover: #818cf8;
+            --secondary-color: #94a3b8;
+            --secondary-hover: #cbd5e1;
+            --background-primary: #0f172a;
+            --background-secondary: #1e293b;
+            --background-tertiary: #334155;
+            --border-color: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Основные стили компилятора */
+        .code-compiler {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--background-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 120px);
+            min-height: 600px;
+        }
+        
+        /* Шапка компилятора */
+        .compiler-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--background-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* Селектор языка */
+        .language-selector {
+            position: relative;
+            min-width: 180px;
+        }
+        
+        .select-control {
+            width: 100%;
+            padding: 0.625rem 2.5rem 0.625rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--background-primary);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .select-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        /* Кнопки действий */
+        .compiler-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.5;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .action-button.secondary {
+            background-color: var(--background-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .action-button.secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .action-button.icon-only {
+            padding: 0.625rem;
+            background-color: var(--background-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .action-button.icon-only:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .action-button i {
+            margin-right: 0.5rem;
+        }
+        
+        .action-button.icon-only i {
+            margin-right: 0;
+        }
+        
+        /* Контейнер редактора */
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--background-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .panel-header h3 {
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .panel-controls {
+            display: flex;
+            gap: 0.25rem;
+        }
+        
+        .control-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            font-size: 0.75rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background-color: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .control-button:hover {
+            background-color: var(--background-tertiary);
+            color: var(--text-primary);
+        }
+        
+        /* Редактор кода */
+        .code-editor-area {
+            flex: 1;
+            height: 100%;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        
+        /* Контейнер ввода-вывода */
+        .io-container {
+            display: flex;
+            height: 200px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .input-panel, .output-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-panel {
+            border-right: 1px solid var(--border-color);
+        }
+        
+        /* Области ввода и вывода */
+        .input-area {
+            flex: 1;
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--background-primary);
+            border: none;
+            resize: none;
+        }
+        
+        .input-area:focus {
+            outline: none;
+        }
+        
+        .input-area::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        
+        .output-area {
+            flex: 1;
+            padding: 0.75rem;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--background-primary);
+        }
+        
+        .output-placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+            font-style: italic;
+        }
+        
+        /* Футер компилятора */
+        .compiler-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--background-secondary);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .execution-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+        }
+        
+        .status::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 0.5rem;
+            border-radius: 50%;
+        }
+        
+        .status.idle {
+            background-color: var(--background-tertiary);
+        }
+        
+        .status.idle::before {
+            background-color: var(--secondary-color);
+        }
+        
+        .status.running {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .status.running::before {
+            background-color: var(--warning-color);
+        }
+        
+        .status.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status.success::before {
+            background-color: var(--success-color);
+        }
+        
+        .status.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+        
+        .status.error::before {
+            background-color: var(--error-color);
+        }
+        
+        /* Переключатель темы */
+        .theme-toggle {
+            position: relative;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--background-tertiary);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        .toggle-switch i {
+            position: absolute;
+            top: 50%;
+            right: 7px;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Стили для состояний вывода */
+        .output-success {
+            color: var(--success-color);
+        }
+        
+        .output-error {
+            color: var(--error-color);
+        }
+        
+        .output-warning {
+            color: var(--warning-color);
+        }
+        
+        /* Стили для отзывчивого дизайна */
+        @media (min-width: 768px) {
+            .io-container {
+                flex-direction: row;
+            }
+            
+            .input-panel {
+                border-right: 1px solid var(--border-color);
+                border-bottom: none;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .io-container {
+                flex-direction: column;
+                height: 300px;
+            }
+            
+            .input-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .compiler-header {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .language-selector {
+                width: 100%;
+            }
+            
+            .compiler-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        .status.running::before {
+            animation: pulse 1s infinite;
+        }
+        
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--background-tertiary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-hover);
+        }
+
+        .header1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow);
+        } 
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-book-reader"></i>
+            Оқушылардың үй жұмысы
+        </div>
+        <a href="{% url 'homework' %}" class="no-underline">
+            <button class="action-btn submit-btn">
+                <i class="fa fa-arrow-left"></i> Артқа
+            </button>
+        </a>
+    </header>
+
+    <div class="main-container">
+        <!-- Works List Section -->
+        <div class="works-section">
+            <div class="filter-buttons">
+                <button class="filter-btn {% if status == 'all' %}active{% endif %}" onclick="window.location.href='?ktp_id={{ ktp.id }}&status=all'">Барлығы</button>
+                <button class="filter-btn {% if status == 'pending' %}active{% endif %}" onclick="window.location.href='?ktp_id={{ ktp.id }}&status=pending'">Күтуде</button>
+                <button class="filter-btn {% if status == 'graded' %}active{% endif %}" onclick="window.location.href='?ktp_id={{ ktp.id }}&status=graded'">Бағаланды</button>
+            </div>
+    
+            <!-- Works List -->
+            <div class="works-list">
+                {% for student in students %}
+                <div class="work-item
+                    {% if student.id|stringformat:"s" == selected_student_id %}active{% endif %}
+                    {% if student.id in graded_student_ids %}graded{% else %}pending{% endif %}"
+                    data-url="{% url 'codework' class_model.id %}?ktp_id={{ ktp.id }}&student_id={{ student.id }}&status={{ status }}">
+                    
+                    <div class="student-info">
+                        <div class="student-avatar">
+                            {{ student.login.first_name|slice:":1" }}{{ student.login.last_name|slice:":1" }}
+                        </div>
+                        <div>
+                            <h3>{{ student.login.first_name }} {{ student.login.last_name }}</h3>
+                            <p style="opacity: 0.8">{{ class_model.class_name }} {{ class_model.option }} сыныбы</p>
+                        </div>
+                    </div>
+                    <small style="opacity: 0.7"></small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    
+        {% if selected_student_id %}
+        <div class="work-content">
+            {% if latest_task %}
+            <div class="work-content1">
+                <header class="header1">
+                    <div class="student-info">
+                        <div class="student-avatar">{{ selected_student.login.first_name|slice:":1" }}{{ selected_student.login.last_name|slice:":1" }}</div>
+                        <div>
+                            <h2>{{ selected_student.login.first_name }} {{ selected_student.login.last_name }}</h2>
+                            <p style="opacity: 0.8">{{ class_model.class_name }} {{ class_model.option }} сыныбы</p>
+                        </div>
+                    </div>
+                </header>
+                <div class="form-group">
+                    <div class="question-form">
+                        <input type="text" name="question" value="{{ ktp.tema }}" style="margin-bottom: 1rem;" disabled>
+                        <input type="text" name="questions" value="{{ ktp.purpose }}" style="margin-bottom: 1rem;" disabled>
+                    </div>
+                    <label for="description" >Есептің берілгені:</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Тапсырма шарттарын жазыңыз..." disabled>{{ latest_task.description }}</textarea>
+                </div>
+                <div class="code-compiler">
+                    <div class="compiler-header">
+                        <div class="language-selector">
+                            <select id="language-select" class="select-control">
+                                <option value="python">Python</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="csharp">C#</option>
+                                <option value="php">PHP</option>
+                                <option value="ruby">Ruby</option>
+                                <option value="go">Go</option>
+                            </select>
+                        </div>
+                        
+                        <div class="compiler-actions">
+                            <button id="run-btn" class="action-button primary">
+                                <i class="fas fa-play"></i> Іске қосу
+                            </button>
+                            <button id="save-btn" class="action-button secondary">
+                                <i class="fas fa-save"></i> Сақтау
+                            </button>
+                            <button id="settings-btn" class="action-button icon-only">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <div class="editor-panel">
+                            <div class="panel-header">
+                                <h3>код редакторы</h3>
+                                <div class="panel-controls">
+                                    <button id="copy-code" class="control-button" title="Кодты көшіру">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button id="clear-code" class="control-button" title="Редакторды тазарту">
+                                        <i class="fas fa-eraser"></i>
+                                    </button>
+                                    <button id="fullscreen-code" class="control-button" title="Толық экран">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="code-editor1" class="code-editor-area"></div>
+                            <input type="hidden" name="code" id="code-hidden">
+                        </div>
+                        
+                        <div class="io-container">
+                            <div class="input-panel">
+                                <div class="panel-header">
+                                    <h3>Енгізу</h3>
+                                    <div class="panel-controls">
+                                        <button id="clear-input" class="control-button" title="Енгізу формасын тазалау">
+                                            <i class="fas fa-eraser"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea id="input-area" name="input_data" class="input-area" placeholder="Кірістерді осы жерге енгізіңіз..."></textarea>
+                            </div>
+                            
+                            <div class="output-panel">
+                                <div class="panel-header">
+                                    <h3>Кіріс</h3>
+                                    <div class="panel-controls">
+                                        <button id="copy-output" class="control-button" title="Кірісті көшіру">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button id="clear-output" class="control-button" title="Кірісті тазалау">
+                                            <i class="fas fa-eraser"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="output-area" class="output-area">
+                                    <div class="output-placeholder">Кодты орындау нәтижесі осында көрсетіледі</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="compiler-footer">
+                        <div class="execution-info">
+                            <span id="status-indicator" class="status idle">Дайын</span>
+                            <span id="execution-time" class="exec-time">Жұмыс уақыты: —</span>
+                            <span id="memory-usage" class="memory-usage">Жад пайдаланылды: —</span>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p>Оқушыға берілген үй тапсырмасы жоқ.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script>
+        // Filter Buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Work Items
+        const workItems = document.querySelectorAll('.work-item');
+        workItems.forEach(item => {
+            item.addEventListener('click', () => {
+                workItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const workItems = document.querySelectorAll('.work-item');
+    
+            workItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Оқушының ID параметрін алу
+                    const studentId = item.getAttribute('data-url').split('student_id=')[1].split('&')[0];
+                    const status = item.getAttribute('data-url').split('status=')[1];
+    
+                    // URL-ді жаңарту, бірақ тек оқушының тапсырмасын көрсету үшін
+                    window.location.href = `${item.getAttribute('data-url')}`;
+                });
+            });
+        });
+
+        function filterStudents(group) {
+            const items = document.querySelectorAll('.work-item');
+            items.forEach(el => {
+                if (group === 'all') {
+                    el.style.display = 'block';
+                } else if (group === 'graded' && el.classList.contains('graded')) {
+                    el.style.display = 'block';
+                } else if (group === 'pending' && el.classList.contains('pending')) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        
+            // Update the filter buttons' active state
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = [...document.querySelectorAll('.filter-btn')].find(b => b.textContent.includes(
+                group === 'all' ? 'Барлығы' : group === 'pending' ? 'Күтуде' : 'Бағаланды'));
+            if (activeBtn) activeBtn.classList.add('active');
+        
+            // Change the URL with the status filter
+            window.location.href = `${window.location.pathname}?status=${group}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Хабарламалар элементін табу
+            const messages = document.querySelectorAll('.message');
+    
+            messages.forEach((message, index) => {
+                // Әр хабарламаны көрсеткеннен кейін белгілі уақыттан соң жасыру
+                setTimeout(() => {
+                    message.style.opacity = 0;  // Хабарламаны жұқарту
+                    message.style.transform = 'translateY(-10px)';  // Хабарламаны жоғары жылжыту
+                }, 3000); // 3 секундтан кейін жасырылады
+    
+                // Хабарлама жоғалған соң оны DOM-нан алып тастау
+                setTimeout(() => {
+                    message.remove();  // Хабарламаны DOM-нан жою
+                }, 4000); // 4 секундтан кейін хабарлама толықтай жоғалады
+            });
+        });
+
+        const editor = document.getElementById('editor');
+        const themeToggle = document.getElementById('themeToggle');
+        const wordCount = document.getElementById('wordCount');
+        const charCount = document.getElementById('charCount');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Предполагаем, что CodeMirror уже загружен
+            const editor1 = CodeMirror(document.getElementById('code-editor'), {
+                mode: 'python',
+                theme: 'dracula',
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: false,
+                lineWrapping: true,
+                extraKeys: {
+                    "Tab": "indentMore",
+                    "Shift-Tab": "indentLess",
+                    "Ctrl-/": "toggleComment"
+                }
+            });
+        // Editor Commands
+        function execCommand(command) {
+            document.execCommand(command, false, null);
+            editor.focus();
+        }
+        
+        function execCommandWithArg(command, arg) {
+            document.execCommand(command, false, arg);
+            editor.focus();
+        }
+        
+        // Word and Character Count
+        editor.addEventListener('input', () => {
+            const text = editor.innerText || '';
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            const chars = text.length;
+        
+            wordCount.textContent = `Сөздер: ${words.length}`;
+            charCount.textContent = `Таңбалар: ${chars}`;
+        });
+        
+        // Auto Save
+        let timeout;
+        editor.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                localStorage.setItem('editorContent', editor.innerHTML);
+            }, 1000);
+        });
+        
+        // Load saved content
+        window.addEventListener('load', () => {
+            const savedContent = localStorage.getItem('editorContent');
+            if (savedContent) {
+                editor.innerHTML = savedContent;
+            }
+        });
+        
+        // Handle Paste to remove formatting
+        editor.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = e.clipboardData.getData('text/plain');
+            document.execCommand('insertText', false, text);
+        });
+        
+        // Initialize tooltips
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', (e) => {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = e.target.title;
+                document.body.appendChild(tooltip);
+            });
+        });
+        
+        // Копирование текста в скрытое поле перед отправкой формы
+        document.querySelector("form").addEventListener("submit", function(event) {
+            let editorContent = document.getElementById("editor").innerText.trim();
+            if (!editorContent) {
+                event.preventDefault(); // Отмена отправки, если текст пустой
+                alert("Тапсырманы жазу керек!");
+                return;
+            }
+            document.getElementById("hiddenInput").value = editorContent; // Сохраняем текст
+        
+            // Очищаем поле после успешной отправки
+            setTimeout(() => {
+                document.getElementById("editor").innerText = "";
+            }, 500);
+        });
+        window.addEventListener("beforeunload", function() {
+            localStorage.removeItem("editorContent"); // Удаляем сохраненный контент
+            document.getElementById("editor").innerText = ""; // Очищаем поле
+        });
+
+        window.addEventListener("load", function() {
+            localStorage.removeItem("editorContent"); // Удаляем старый контент
+            document.getElementById("editor").innerText = ""; // Очищаем поле
+        });
+            
+            // Установка размера редактора
+            editor1.setSize("100%", "100%");
+            
+            // Обработчик переключения языка
+            document.getElementById('language-select').addEventListener('change', function() {
+                const language = this.value;
+                let mode;
+                
+                switch(language) {
+                    case 'javascript':
+                        mode = 'javascript';
+                        break;
+                    case 'python':
+                        mode = 'python';
+                        break;
+                    case 'java':
+                    case 'cpp':
+                    case 'csharp':
+                        mode = 'clike';
+                        break;
+                    case 'php':
+                        mode = 'php';
+                        break;
+                    case 'ruby':
+                        mode = 'ruby';
+                        break;
+                    case 'go':
+                        mode = 'go';
+                        break;
+                    default:
+                        mode = 'python';
+                }
+                
+                editor1.setOption('mode', mode);
+            });
+            
+            // Запуск кода
+            document.getElementById('run-btn').addEventListener('click', function() {
+                const code = editor1.getValue();
+                const input = document.getElementById('input-area').value;
+                const output = document.getElementById('output-area');
+                const statusIndicator = document.getElementById('status-indicator');
+                const executionTime = document.getElementById('execution-time');
+                const memoryUsage = document.getElementById('memory-usage');
+                
+                // Изменение статуса
+                statusIndicator.className = 'Іске қосу күйі';
+                statusIndicator.textContent = 'Орындау...';
+                
+                // Симуляция выполнения кода (в реальном приложении здесь будет отправка запроса на сервер)
+                output.innerHTML = '<div>Кодтың орындалу...</div>';
+                
+                setTimeout(() => {
+                    // Симуляция результата
+                    if (Math.random() > 0.2) {
+                        output.innerHTML = `<div>Нәтижесі:</div><pre class="output-success">${code}\n\nЕнгізу:\n${input || '(пусто)'}\n\nШығыс:\nУспешно выполнено!</pre>`;
+                        statusIndicator.className = 'Сәтті';
+                        statusIndicator.textContent = 'Успешно';
+                    } else {
+                        output.innerHTML = `<div>Қате:</div><pre class="output-error">Error: Unexpected token\n\nStack trace:\n  at line 1, column 5</pre>`;
+                        statusIndicator.className = 'Error';
+                        statusIndicator.textContent = 'Қате';
+                    }
+                    
+                    executionTime.textContent = `Время выполнения: ${(Math.random() * 0.5).toFixed(3)} сек`;
+                    memoryUsage.textContent = `Использовано памяти: ${Math.floor(Math.random() * 50)} MB`;
+                }, 1500);
+            });
+            
+            // Копирование кода
+            document.getElementById('copy-code').addEventListener('click', function() {
+                navigator.clipboard.writeText(editor1.getValue())
+                    .then(() => {
+                        this.innerHTML = '<i class="fas fa-check"></i>';
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-copy"></i>';
+                        }, 2000);
+                    });
+            });
+            
+            // Очистка редактора
+            document.getElementById('clear-code').addEventListener('click', function() {
+                editor1.setValue('');
+            });
+            
+            // Полноэкранный режим
+            document.getElementById('fullscreen-code').addEventListener('click', function() {
+                const editorPanel = document.querySelector('.editor-panel');
+                
+                if (!document.fullscreenElement) {
+                    editorPanel.requestFullscreen().catch(err => {
+                        console.error(`Ошибка: ${err.message}`);
+                    });
+                    this.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    document.exitFullscreen();
+                    this.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            });
+            
+            // Очистка ввода
+            document.getElementById('clear-input').addEventListener('click', function() {
+                document.getElementById('input-area').value = '';
+            });
+            
+            // Копирование вывода
+            document.getElementById('copy-output').addEventListener('click', function() {
+                const output = document.getElementById('output-area').innerText;
+                navigator.clipboard.writeText(output)
+                    .then(() => {
+                        this.innerHTML = '<i class="fas fa-check"></i>';
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-copy"></i>';
+                        }, 2000);
+                    });
+            });
+            
+            // Очистка вывода
+            document.getElementById('clear-output').addEventListener('click', function() {
+                document.getElementById('output-area').innerHTML = '<div class="output-placeholder">Результат выполнения кода будет отображаться здесь</div>';
+            });
+            
+            // Переключение темы
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    editor1.setOption('theme', 'dracula');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    editor1.setOption('theme', 'default');
+                }
+            });
+            
+            // Проверка предпочтительной темы пользователя
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeToggle.checked = true;
+                document.documentElement.setAttribute('data-theme', 'dark');
+                editor1.setOption('theme', 'dracula');
+            }
+        });
+
+        document.getElementById('save-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('code-hidden').value = editor.getValue();  // Где editor — это CodeMirror или другой редактор
+            document.querySelector('form').submit();
+        });
+
+        document.getElementById('run-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+        
+            const code = editor.getValue();  // Если у тебя CodeMirror
+            const inputData = document.getElementById('input-area').value;
+        
+            fetch('/run-code/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),  // Не забудь про csrf
+                },
+                body: JSON.stringify({
+                    code: code,
+                    input_data: inputData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output-area').innerText = data.result;
+            })
+            .catch(error => {
+                document.getElementById('output-area').innerText = 'Ошибка выполнения кода!';
+                console.error('Error:', error);
+            });
+        });
+        
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        let codeEditor;
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            codeEditor = CodeMirror(document.getElementById('code-editor1'), {
+                mode: 'python',
+                theme: 'dracula',
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: false,
+                lineWrapping: true,
+                extraKeys: {
+                    "Tab": "indentMore",
+                    "Shift-Tab": "indentLess",
+                    "Ctrl-/": "toggleComment"
+                }
+            });
+            
+            codeEditor.setSize("100%", "230px");  // Размер редактора
+            
+            // Сохранение кода при нажатии "Сохранить"
+            document.getElementById('save-btn').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('code-hidden').value = codeEditor.getValue();
+                document.querySelector('form').submit();
+            });
+            
+            // Запуск кода при нажатии "Запустить"
+            document.getElementById('run-btn').addEventListener('click', function(event) {
+                event.preventDefault();
+            
+                const code = codeEditor.getValue();
+                const inputData = document.getElementById('input-area').value;
+            
+                fetch('/run-code/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        input_data: inputData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output-area').innerText = data.result;
+                    updateStatus('success', 'Успешно');
+                })
+                .catch(error => {
+                    document.getElementById('output-area').innerText = 'Ошибка выполнения кода!';
+                    updateStatus('error', 'Ошибка');
+                    console.error('Error:', error);
+                });
+            
+                updateStatus('running', 'Выполнение...');
+            });
+            
+            // Получение CSRF-токена
+            function getCSRFToken() {
+                return document.querySelector('[name=csrfmiddlewaretoken]').value;
+            }
+            
+            // Обновление статуса выполнения
+            function updateStatus(className, text) {
+                const statusIndicator = document.getElementById('status-indicator');
+                statusIndicator.className = `status ${className}`;
+                statusIndicator.textContent = text;
+            }
+            });
+    </script>
+</body>
+</html>
