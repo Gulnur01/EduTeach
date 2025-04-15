@@ -1,0 +1,202 @@
+
+.accordion {
+    max-width: 1200px;
+    margin: 20px auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: white;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background: linear-gradient(135deg, #8B5CF6, #8b5ef4);
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.accordion-header:hover {
+    background: linear-gradient(135deg, #8B5CF6, #8b5ef4);
+}
+
+.accordion-header h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.accordion-icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.accordion-icon::before,
+.accordion-icon::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 2px;
+}
+
+.accordion-icon::before {
+    width: 2px;
+    height: 24px;
+    left: 11px;
+    top: 0;
+}
+
+.accordion-icon::after {
+    width: 24px;
+    height: 2px;
+    left: 0;
+    top: 11px;
+}
+
+.accordion.active .accordion-icon {
+    transform: rotate(45deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.accordion.active .accordion-content {
+    max-height: 2000px;
+}
+
+.table-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    vertical-align: top;
+}
+
+th {
+    background-color: #8B5CF6;
+    color: white;
+    text-align: center;
+    font-weight: normal;
+}
+
+/* Adjusted column widths */
+td:first-child {  /* Column 1 */
+    width: 5%;
+    text-align: center;
+}
+
+td:nth-child(2) {  /* Column 2 */
+    width: 25%;
+}
+
+td:nth-child(3) {  /* Column 3 */
+    width: 40%;
+}
+
+td:nth-child(4) {  /* Column 4 */
+    width: 8%;
+    text-align: center;
+}
+
+td:nth-child(5) {  /* Column 5 */
+    width: 12%;
+    text-align: center;
+}
+
+td:last-child {    /* Column 6 */
+    width: 10%;
+    text-align: center;
+}
+
+.table-header {
+    text-align: center;
+    font-weight: bold;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+}
+
+.multi-line {
+    white-space: pre-line;
+}
+
+tr:hover td {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .accordion {
+        margin: 10px;
+    }
+    
+    .accordion-header {
+        padding: 15px;
+    }
+    
+    th, td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .table-container {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-header h2 {
+        font-size: 1rem;
+    }
+
+    th, td {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+}
+
+.container {
+    flex-grow: 1; /* Занимает всё пространство до кнопки */
+    padding: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-start; /* Выравнивание по левому краю */
+    padding: 10px; /* Добавьте отступ, если нужно */
+  }
+  
+  .button {
+    background-color: #8B5CF6;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Отступ справа от кнопки */
+  }       

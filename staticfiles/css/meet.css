@@ -1,0 +1,120 @@
+:root {
+    --primary-purple: #8A3FFC;
+    --hover-purple: #7B2FFF;
+    --background-color: #F8F9FA;
+    --text-color: #424242;
+    --border-color: #E0E0E0;
+}
+
+.top-panel {
+    background: white;
+    padding: 16px 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: flex-end; /* Выравнивание по правому краю */
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 2px; /* Отступ от правого края */
+    z-index: 5000;
+    width: 1264px; /* Ширина определяется содержимым */
+}
+
+.meeting-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.start-meeting {
+    background-color: var(--primary-purple);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.start-meeting:hover {
+    background-color: var(--hover-purple);
+    transform: translateY(-1px);
+}
+
+.meeting-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-button {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.control-button:hover {
+    background-color: var(--background-color);
+}
+
+.time {
+    font-size: 14px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 20px; /* Добавлено расстояние от кнопок */
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .time {
+        display: none;
+    }
+
+    .meeting-controls {
+        gap: 8px;
+    }
+
+    .start-meeting span {
+        display: none;
+    }
+
+    .start-meeting {
+        padding: 10px;
+    }
+}

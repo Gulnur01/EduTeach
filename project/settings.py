@@ -152,3 +152,4 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 DEBUG = True
 
+ALLOWED_HOSTS = ['eduteach.onrender.com']
